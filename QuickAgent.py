@@ -26,6 +26,13 @@ from deepgram import (
     Microphone,
 )
 
+import os
+
+groq_model = os.environ.get("GROQ_MODEL")
+GROQ_MODEL = os.environ.get("GROQ_MODEL")
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+DEEPGRAM_API_KEY = os.environ.get("DEEPGRAM_API_KEY")
+
 load_dotenv()
 
 class LanguageModelProcessor:
