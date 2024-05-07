@@ -196,20 +196,21 @@ async def get_transcript(callback):
         print(f"Could not open socket: {e}")
         return
 
+import streamlit as st
+
 class ConversationManager:
     def __init__(self):
         self.transcription_response = ""
         self.llm = LanguageModelProcessor()
+        self.output_text = st.empty()  # Create a placeholder for output text
 
     async def main(self):
         def handle_full_sentence(full_sentence):
             self.transcription_response = full_sentence
 
-        # Loop indefinitely until "goodbye" is detected
         while True:
             await get_transcript(handle_full_sentence)
             
-            # Check for "goodbye" to exit the loop
             if "goodbye" in self.transcription_response.lower():
                 break
             
@@ -218,7 +219,9 @@ class ConversationManager:
             tts = TextToSpeech()
             tts.speak(llm_response)
 
-            # Reset transcription_response for the next loop iteration
+            self.output_text.write(f"Human: {self.transcription_response}")
+            self.output_text.write(f"Assistant: {llm_response}")
+
             self.transcription_response = ""
 
 if __name__ == "__main__":
