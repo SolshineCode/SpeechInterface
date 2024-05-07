@@ -198,22 +198,31 @@ async def get_transcript(callback):
 
 import streamlit as st
 
+
 class ConversationManager:
     def __init__(self):
         self.transcription_response = ""
         self.llm = LanguageModelProcessor()
         self.output_text = st.empty()  # Create a placeholder for output text
 
+    def process_audio(self, audio_data):
+        # Implement your audio processing logic here
+        # You can use the deepgram-sdk or any other library to transcribe the audio data
+        # and set self.transcription_response with the transcribed text
+        pass
+
     async def main(self):
         def handle_full_sentence(full_sentence):
             self.transcription_response = full_sentence
 
         while True:
-            await get_transcript(handle_full_sentence)
-            
+            # Wait for the transcription_response to be set by process_audio
+            while not self.transcription_response:
+                await asyncio.sleep(0.1)
+
             if "goodbye" in self.transcription_response.lower():
                 break
-            
+
             llm_response = self.llm.process(self.transcription_response)
 
             tts = TextToSpeech()
